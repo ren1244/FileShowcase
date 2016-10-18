@@ -7,7 +7,8 @@ require_once('libs.php');
 
 if(isset($_POST['init']) && strcmp($_POST['init'],"true")==0)
 {
-	echo ($_SESSION['time']=time());
+	//echo ($_SESSION['time']=time());
+	$_SESSION['time']=time();
 	exit;
 }
 
@@ -15,16 +16,16 @@ if(isset($_POST['init']) && strcmp($_POST['init'],"true")==0)
 $A=array('id','hash','time');
 $A_N=count($A);
 for($i=0;$i<$A_N;++$i)
-	if(!isset($_POST[$A[$i]]))
+	if(!isset($_GET[$A[$i]]))
 	{
 		echo 'prameter err:'.$A[$i];
 		exit;
 	}
 //驗證
-$str=mb_convert_encoding($_POST['id'],"UTF-16LE","UTF-8");
+$str=mb_convert_encoding($_GET['id'],"UTF-16LE","UTF-8");
 $A=array();
 $A_N=StringToBytes($str,$A);
-$t=VerifyDTP($A,$A_N,(int)($_POST['time']),$_POST['hash']);
+$t=VerifyDTP($A,$A_N,(int)($_GET['time']),$_GET['hash']);
 if($t)
 {
 	echo "Verify_ERR code $t";
@@ -42,15 +43,15 @@ if($A_N<0)
 	$DBA->close();
 	exit('DB_READ_ERR');
 }
-$str=$_POST['id'];
+$str=$_GET['id'];
 for($i=0;$i<$A_N && strcmp($str,$A[$i])!=0;++$i);
 if($i<$A_N)
 {
 	$n=$DBA->getRow($t,$i);
 	$t[3]='********';
-	echo "writeRow(t,$i) t=";
+	/*echo "writeRow(t,$i) t=";
 	for($j=0;$j<$n;++$j)
-		echo $t[$j]." ";
+		echo $t[$j]." ";*/
 	$tmpRow=0;
 	$tmpRowN=$DBA->getRow($tmpRow,$i);
 	$t=$DBA->writeRow($t,$i);
@@ -63,4 +64,5 @@ if($i<$A_N)
 		echo "No $sever_fname";
 }
 $DBA->close();
+echo "刪除成功";
 ?>

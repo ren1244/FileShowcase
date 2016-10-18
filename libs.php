@@ -53,9 +53,9 @@ function StringToBytes(&$str,&$A)
 		else//雙數
 			array_push($A,$uc16);*/
 		if($i&3)//單數
-			$A[$i>>2]|=(ord(substr($str,$i,1))&0xFF)<<8*($i&3);
+			$A[$i>>2]|=(ord($str[$i])&0xFF)<<8*($i&3);
 		else//雙數
-			array_push($A,ord(substr($str,$i,1))&0xFF);
+			array_push($A,ord($str[$i])&0xFF);
 	}
 	return $n;
 }
@@ -113,16 +113,16 @@ function Base64ToBytes(&$B64str,&$A,&$N)
 function PushByte($b,&$A,&$N)
 {
 	if(($N&3)==0)
-		array_push($A,$b);
+		$A[]=$b;
 	else
-		$A[count($A)-1]|=$b<<($N&3)*8;
+		$A[$N>>2]|=$b<<($N&3)*8;
 	++$N;
 	//echo $N." ";
 	//ShowArray($A);
 }
 function B64Idx(&$B64str,$idx)
 {
-	$a=ord(substr($B64str,$idx,1));
+	$a=ord($B64str[$idx]);
 	if(0x41<=$a && $a<=0x5A)
 		return $a-0x41;
 	if(0x61<=$a && $a<=0x7A)
@@ -146,17 +146,17 @@ function BytesToBase64(&$A,$N)
 {
 	$B64="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 	$str="";
-	for($i=0;$i<$N;++$i)
+	for($t=$i=0;$i<$N;++$i)
 	{
 		$b=$A[$i>>2]>>($i&3)*8&0xFF;
 		$s=$i%3*2;
 		$t=$t<<6-$s&0xFFFFFFFF|$b>>$s+2&0x3F>>$s;
-		$str.=substr($B64,$t,1);
+		$str.=$B64[$t];
 		$t=$b&(0x3F>>4-$s);
 		if($s==4)
 		{
 			$t=$b&0x3F;
-			$str.=substr($B64,$t,1);
+			$str.=$B64[$t];
 			$t=0;
 		}
 	}

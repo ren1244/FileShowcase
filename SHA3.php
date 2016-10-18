@@ -2,6 +2,7 @@
 
 require_once('libs.php');
 //Stat is uint32_t A[400]; (1600 bit Array)
+
 function run(&$Stat)
 {
 	for($i=0;$i<24;++$i)
@@ -13,20 +14,20 @@ function run(&$Stat)
 		f5($Stat,$i);
 	}
 }
-function check_over(&$Stat)
+/*function check_over(&$Stat)
 {
 	$n=count($Stat);
 	for($i=0;$i<$n*4;++$i)
 		if($Stat[$i]>>32)
 			echo "[".$i."]";
-}
+}*/
 function f1(&$Stat)
 {
 	for($i=0;$i<10;++$i)
 		$Stat[50+$i]=$Stat[$i]^$Stat[$i+10]^$Stat[$i+20]^$Stat[$i+30]^$Stat[$i+40];
 	for($i=0;$i<10;++$i)
 	{
-		$D=($Stat[50+($i+2)%10]<<1&0xFFFFFFFF|$Stat[50+($i+3-($i<<1&2))%10]>>31&0xFFFFFFFF);
+		$D=($Stat[50+($i+2)%10]<<1&0xFFFFFFFF|$Stat[50+($i+3-($i<<1&2))%10]>>31&0x1);
 		$D=$D^$Stat[50+($i+8)%10];
 		for($z=0;$z<5;++$z)
 			$Stat[$i+10*$z]=$Stat[$i+10*$z]^$D;
@@ -47,12 +48,14 @@ function f2(&$Stat)
 		$H=$off>=32?$Stat[$pos]:$Stat[$pos+1];
 		$L=$off>=32?$Stat[$pos+1]:$Stat[$pos];		
 		$off=$off%32;
-		$Stat[$pos+50]=$L<<$off&0xFFFFFFFF|$H>>32-$off;
-		$Stat[$pos+51]=$H<<$off&0xFFFFFFFF|$L>>32-$off;
+		$Stat[$pos+50]=$L<<$off&0xFFFFFFFF|($off<32?($H>>1&0x7FFFFFFF)>>31-$off:0);
+		$Stat[$pos+51]=$H<<$off&0xFFFFFFFF|($off<32?($L>>1&0x7FFFFFFF)>>31-$off:0);
+		
 		$pos=$t_y;
 		$t_y=(2*$t_x+3*$t_y)%5;
 		$t_x=$pos;
 	}
+	
 	//echo "f2<br>";
 	//ShowState($Stat);
 }
@@ -145,7 +148,7 @@ function SHAKE128($P_A,$P_N,$d,$ret_type)
 		array_push($S_A,0);
 	//填滿P為168的整數倍
 	if($P_N%168==167)
-		push_byte_macro($P_A,$P_N,0xF9);
+		push_byte_macro($P_A,$P_N,0x9F);
 	else
 	{
 		push_byte_macro($P_A,$P_N,0x1F);

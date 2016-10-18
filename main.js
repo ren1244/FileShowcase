@@ -5,12 +5,14 @@ function init()
 	LTS=t.getTimezoneOffset();
 	call_php("Read.php","",ShowData);
 }
-
 function ShowData(d_str)
 {
 	var d=document .getElementById("show");
 	var i,t,tb,tr,td,c;
-	//var str="";
+	
+	/*for(c=d.children.length;--c>=0;)
+		d.removeChild(d.children[c]);*/
+	d.innerHTML="";
 	
 	d .appendChild(tb=document .createElement("table"));
 	tb .appendChild(tr=document .createElement("tr"));
@@ -69,15 +71,18 @@ function toDeleteCbk(str)
 	AA=SHAKE128({A:AA,N:AA_N},256,1);
 	for(i=0;i<32;++i)
 		N=push_byte(A,N,AA[i>>>2]>>>8*(i&3)&0xFF);
-	str+="<br>A="+ShowBytes(A,N);
+	//str+="<br>A="+ShowBytes(A,N);
 	var h=SHAKE128({A:A,N:N},256,0);
-	str+="<br>hash="+h;
+	//str+="<br>hash="+h;
 	document .getElementById("log").innerHTML=str;
-	call_php("Delete.php","id="+gtmp.code+"&time="+t+"&hash="+h,toDeleteCbk2,0);
+	//call_php("Delete.php","id="+gtmp.code+"&time="+t+"&hash="+h,toDeleteCbk2,0);
+	var ff=document .getElementById("if_php");
+	ff.src="Delete.php?id="+gtmp.code+"&time="+t+"&hash="+h;
 }
 function toDeleteCbk2(str)
 {
 	document .getElementById("log").innerHTML+="<br>"+str;
+	call_php("Read.php","",ShowData);
 }
 function push_byte(A,N,b)
 {

@@ -22,27 +22,45 @@ function upld()
 	var A,A_N,AA,AA_N,i,hash,dt;
 	var dbg="";
 	A=[];AA=[];A_N=AA_N=0;
-	A_N=StringToBytes(UF,A); //A加入檔案
-	for(i=0;i<4;++i)
-		A_N=push_byte(A,A_N,TS>>>8*(i&3)&0xFF); //A加入時間
-	AA_N=StringToBytes(document .getElementById("pwd").value,AA);
-	AA=SHAKE128({A:AA,N:AA_N},256,1);
-	dbg+="B64(FileName)="+StringToBase64(UF)+"\n";
-	dbg+="hash(Bytes(pwd))="+ShowBytes(AA,32);
-	for(i=0;i<32;++i)
-		A_N=push_byte(A,A_N,AA[i>>>2]>>>8*(i&3)&0xFF);
-	dbg+="\nA="+ShowBytes(A,A_N);
-	HS=SHAKE128({A:A,N:A_N},256,0);
-	dbg+="\nHash(A)="+HS;
-	
-	document .getElementById("inp_hash").value=HS;
-	document .getElementById("inp_cript").value=DC;
-	document .getElementById("inp_time").value=TS;
-	
-	dbg+="\n"+UF+" "+DC+" "+TS+" "+HS;
-	
-	document .getElementById("dbg").innerHTML=dbg;
-	call_php("Upload.php","init=true",RealSubmit,false);
+	//A加入檔案
+	if(f.length>0)
+	{
+		var reader=new FileReader();
+		reader.onload=function(e)
+		{
+			var i;
+			var a=new Uint8Array(e.target.result);
+			for(i=0;i<a.length;++i)
+				A_N=push_byte(A,A_N,a[i]);
+			//計算檔案雜湊值
+			HS=sha256(A,A_N);
+			//放入檔案名稱+檔案雜湊值
+			A=[];
+			A_N=StringToBytes(UF+HS,A); 
+			//A加入時間
+			for(i=0;i<4;++i)
+				A_N=push_byte(A,A_N,TS>>>8*(i&3)&0xFF);
+			AA_N=StringToBytes(document .getElementById("pwd").value,AA);
+			AA=SHAKE128({A:AA,N:AA_N},256,1);
+			dbg+="B64(FileName)="+StringToBase64(UF)+"\n";
+			dbg+="hash(Bytes(pwd))="+ShowBytes(AA,32);
+			for(i=0;i<32;++i)
+				A_N=push_byte(A,A_N,AA[i>>>2]>>>8*(i&3)&0xFF);
+			dbg+="\nA="+ShowBytes(A,A_N);
+			HS=SHAKE128({A:A,N:A_N},256,0);
+			dbg+="\nHash(A)="+HS;
+			
+			document .getElementById("inp_hash").value=HS;
+			document .getElementById("inp_cript").value=DC;
+			document .getElementById("inp_time").value=TS;
+			
+			dbg+="\n"+UF+" "+DC+" "+TS+" "+HS;
+			
+			//document .getElementById("dbg").innerHTML=dbg;
+			call_php("Upload.php","init=true",RealSubmit,false);
+		};
+		reader.readAsArrayBuffer(f[0]);
+	}
 }
 function RealSubmit(str)
 {

@@ -18,7 +18,7 @@ function VerifyDTP($DataArr,$N,$StampTime,$Hash)
 		PushByte($StampTime>>8*($i&3)&0xFF,$DataArr,$N);
 	for($i=0;$i<32;++$i)//pwd->Bytes
 		PushByte((int)base_convert(substr($pwd,$i*2,2),16,10),$DataArr,$N);
-	echo "<br>A=".ShowBytes($DataArr,$N)."<br>";
+	//echo "<br>A=".ShowBytes($DataArr,$N)."<br>";
 	$CalHash=SHAKE128($DataArr,$N,256,0);//get hash
 	if(strcmp($Hash,$CalHash)!=0)
 	{
