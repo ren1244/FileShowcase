@@ -16,16 +16,16 @@ if(isset($_POST['init']) && strcmp($_POST['init'],"true")==0)
 $A=array('id','hash','time');
 $A_N=count($A);
 for($i=0;$i<$A_N;++$i)
-	if(!isset($_GET[$A[$i]]))
+	if(!isset($_POST[$A[$i]]))
 	{
 		echo 'prameter err:'.$A[$i];
 		exit;
 	}
 //驗證
-$str=mb_convert_encoding($_GET['id'],"UTF-16LE","UTF-8");
+$str=mb_convert_encoding($_POST['id'],"UTF-16LE","UTF-8");
 $A=array();
 $A_N=StringToBytes($str,$A);
-$t=VerifyDTP($A,$A_N,(int)($_GET['time']),$_GET['hash']);
+$t=VerifyDTP($A,$A_N,(int)($_POST['time']),$_POST['hash']);
 if($t)
 {
 	echo "Verify_ERR code $t";
@@ -43,7 +43,7 @@ if($A_N<0)
 	$DBA->close();
 	exit('DB_READ_ERR');
 }
-$str=$_GET['id'];
+$str=$_POST['id'];
 for($i=0;$i<$A_N && strcmp($str,$A[$i])!=0;++$i);
 if($i<$A_N)
 {

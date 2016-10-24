@@ -5,10 +5,13 @@ require_once('SHA3.php');
 
 function VerifyDTP($DataArr,$N,$StampTime,$Hash)
 {
-	static $pwd="7E8F9DAFE3C950B73F87994C74A7674C666E0FF775F35D1498437D65049438D0";
+	//這是密碼產生的雜湊字串，請將 first_use.html 產生的字串取代這邊 7F9C...EF26 的區域
+	//(若沒更改，密碼就是空字串，也就是不用輸入)
+	static $pwd="7F9C2BA4E88F827D616045507605853ED73B8093F6EFBC88EB1A6EACFA66EF26";
+	//=====================================
 	if(!isset($_SESSION['time']))
 		return -1;
-	$x=$_SESSION['time']-$StampTime;
+	$x=$StampTime-$_SESSION['time'];
 	if($x<-1 || $x>15)
 	{
 		echo " tdiff[".$x."] ";

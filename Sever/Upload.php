@@ -24,7 +24,7 @@ if(isset($_POST['init']) && strcmp($_POST['init'],"true")==0)
 	exit;
 }
 
-$path='test/';
+$path='filedata/';
 $rand_try_max=0xFF; //亂數嘗試限制
 
 //傳入參數驗證

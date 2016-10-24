@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>檔案櫥窗</title>
+	<script src="StringBase64.js" type="text/javascript"></script>
+	<script src="SHA3.js" type="text/javascript"></script>
+	<script src="SHA256.js" type="text/javascript"></script>
+	<script src="FileShowcase.js" type="text/javascript"></script>
+	<script src="main.js" type="text/javascript"></script>
+	<link href="main.css" rel="stylesheet" type="text/css">
+</head>
+<body onload="init()">
+	
+	<div id="user"><!--使用者BEGIN-->
+		<div class="dlarea">下載區</div>
+		<hr>
+		<div id="show"></div>
+	</div><!--使用者END-->
+	<div id="admin" style="display:none"><!--管理員操作BEGIN-->
+		
+		<form id="menu">
+			<input type="radio" name=cmd value="上傳" checked>上傳
+			<input type="radio" name=cmd value="刪除">刪除
+		</form><button id='refresh'>重新整理</button>
+		<hr>
+		<div id="up_panel">
+			<div>上傳檔案	<input type="file" name="upload" id="inp_file"></div>
+			<div><span class="tag">檔案描述 </span><textarea rows="10" id="txt" ></textarea></div>
+		</div>
+		<form id="del_panel" style="display:none;"></form>
+		<div id="run_panel">管理密碼 <input type="password" id="pwd"><button id="admin_run">上傳</button></div>
+	</div><!--管理員操作END-->
+	<image id="menu_flod" class="menu_flod" src="flod.svg"></image>
+</body>
+</html>

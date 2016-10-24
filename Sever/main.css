@@ -1,0 +1,49 @@
+table {border-collapse: collapse;}
+table,th,td{border:1px solid black;}
+th,td{text-align:center;padding:0.25em;}
+textarea{resize:none;vertical-align:top;}
+iframe{display:block;width:100%;border:none;}
+.tag{vertical-align:top;}
+form{display:inline-block;}
+pre{display:block;margin:0;padding:0;}
+
+#user{
+	display:block;
+	width:500px;
+	margin:0px auto;
+	max-width:100%;
+}
+#show{
+	border:1px solid lightgray;
+	border-radius:5px;
+	padding:5px;
+}
+#admin{
+	background-color:lightgray;
+	position:fixed;
+	right:5px;
+	top:0px;
+	padding:20px;
+	display:block;
+	width:320px;
+	border:1px solid;
+	overflow:hide;
+	max-width:85%;
+}
+#admin textarea{width:100%}
+
+.menu_flod{position:fixed;right:10px;top:5px;}
+
+.dlarea{font-size:1.5em;font-weight:bold}
+
+.date_header{background-color:#BBCBDA;}
+
+.data_header a{text-decoration:none;}
+.data_header span{float:right;cursor:pointer;font-size:0.95em;}
+
+
+.data_content{display:none;}
+.data_content div{color:gray;font-size:0.9em;margin:0.25em 0}
+.data_content span{float:right;}
+
+.dev{background-color:#FF8080;padding:3px;margin:3px 0px;text-align:center;}
